@@ -68,6 +68,8 @@ from . import csatqa
 from . import haerae
 from . import cmmlu
 
+from .ja import jcommonsenseqa
+
 ########################################
 # Translation tasks
 ########################################
@@ -87,10 +89,7 @@ selected_translation_benchmarks = {
 }
 
 # 319 total
-all_translation_benchmarks = {
-    ts: sacrebleu.get_langpairs_for_testset(ts)
-    for ts in sacrebleu.get_available_testsets()
-}
+all_translation_benchmarks = {ts: sacrebleu.get_langpairs_for_testset(ts) for ts in sacrebleu.get_available_testsets()}
 
 
 ########################################
@@ -330,11 +329,11 @@ TASK_REGISTRY = {
     "csatqa_rch": csatqa.RCH,
     "csatqa_li": csatqa.LI,
     "haerae_hi": haerae.HI,
-    "haerae_kgk":haerae.KGK,
-    "haerae_lw":haerae.LW,
-    "haerae_rc":haerae.RC,
-    "haerae_rw":haerae.RW,
-    "haerae_sn":haerae.SN,
+    "haerae_kgk": haerae.KGK,
+    "haerae_lw": haerae.LW,
+    "haerae_rc": haerae.RC,
+    "haerae_rw": haerae.RW,
+    "haerae_sn": haerae.SN,
     # Requires manual download
     # Requires manual download of data.
     # "storycloze_2016": storycloze.StoryCloze2016,
@@ -350,6 +349,7 @@ TASK_REGISTRY = {
     **scrolls.construct_tasks(),
     **ceval.create_all_tasks(),
     **cmmlu.create_all_tasks(),
+    "jcommonsenseqa": jcommonsenseqa.JCommonsenseQA,
 }
 
 
@@ -372,16 +372,13 @@ def add_json_task(task_name):
         if len(splits) != 2 or not splits[1]:
             raise ValueError(
                 "json tasks need a path argument pointing to the local "
-                "dataset, specified like this: json="
-                + _EXAMPLE_JSON_PATH
-                + ' (if there are no splits, use "train")'
+                "dataset, specified like this: json=" + _EXAMPLE_JSON_PATH + ' (if there are no splits, use "train")'
             )
 
         json_path = splits[1]
         if json_path == _EXAMPLE_JSON_PATH:
             raise ValueError(
-                "please do not copy the example path directly, but substitute "
-                "it with a path to your local dataset"
+                "please do not copy the example path directly, but substitute " "it with a path to your local dataset"
             )
         return lambda: json.JsonPerplexity(json_path)
 
@@ -404,19 +401,11 @@ def get_task_name_from_object(task_object):
             return name
 
     # this gives a mechanism for non-registered tasks to have a custom name anyways when reporting
-    return (
-        task_object.EVAL_HARNESS_NAME
-        if hasattr(task_object, "EVAL_HARNESS_NAME")
-        else type(task_object).__name__
-    )
+    return task_object.EVAL_HARNESS_NAME if hasattr(task_object, "EVAL_HARNESS_NAME") else type(task_object).__name__
 
 
 def get_task_dict(task_name_list: List[Union[str, lm_eval.base.Task]]):
-    task_name_dict = {
-        task_name: get_task(task_name)()
-        for task_name in task_name_list
-        if isinstance(task_name, str)
-    }
+    task_name_dict = {task_name: get_task(task_name)() for task_name in task_name_list if isinstance(task_name, str)}
     task_name_from_object_dict = {
         get_task_name_from_object(task_object): task_object
         for task_object in task_name_list
