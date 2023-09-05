@@ -31,7 +31,7 @@ class JNLI(XNLIBase):
     VERSION = 1.1
     DATASET_PATH = "shunk031/JGLUE"
     DATASET_NAME = "JNLI"
-    QUESTION_WORD = "正しいですか？"
+    QUESTION_WORD = "正しいですか"
     ENTAILMENT_LABEL = "はい"
     NEUTRAL_LABEL = "また"
     CONTRADICTION_LABEL = "いいえ"
