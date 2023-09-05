@@ -62,11 +62,3 @@ class JNLI(XNLIBase):
             "hypothesis": doc["sentence2"],
             "label": label
         }
-
-    def doc_to_target(self, doc):
-        return (
-            " "
-            + [self.ENTAILMENT_LABEL, self.CONTRADICTION_LABEL, self.NEUTRAL_LABEL][
-                doc["label"]
-            ]
-        )
