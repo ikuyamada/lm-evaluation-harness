@@ -32,6 +32,10 @@ class JNLI(XNLIBase):
     VERSION = 1.1
     DATASET_PATH = "shunk031/JGLUE"
     DATASET_NAME = "JNLI"
+    QUESTION_WORD = "正しい"
+    ENTAILMENT_LABEL = "はい"
+    NEUTRAL_LABEL = "また"
+    CONTRADICTION_LABEL = "いいえ"
 
     def has_training_docs(self):
         return True
