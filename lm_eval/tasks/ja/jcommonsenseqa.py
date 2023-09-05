@@ -30,15 +30,10 @@ _CITATION = """
 
 
 class JCommonsenseQA(MultipleChoiceTask):
-    """
-    prompt format is taken from [日本語に特化した60億パラメータ規模のGPTモデルの構築と評価](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H9-4.pdf)
-    """
-
     VERSION = 1.1
     DATASET_PATH = "shunk031/JGLUE"
     DATASET_NAME = "JCommonsenseQA"
-    # DESCRIPTION = "[問題]に対する[答え]を[選択肢]の中から選んでください。\n\n"
-    DESCRIPTION = "質問と回答の選択肢を入力として受け取り、選択肢から回答を選択してください。なお、回答は選択肢の番号(例:0)でするものとします。 \n\n"
+    DESCRIPTION = ""
 
     def has_training_docs(self):
         return True
@@ -59,38 +54,10 @@ class JCommonsenseQA(MultipleChoiceTask):
 
     def _process_doc(self, doc):
         return {
-            "goal": doc["question"],
+            "query": doc["question"],
             "choices": [doc[f"choice{i}"] for i in range(5)],
             "gold": doc["label"],
         }
 
     def doc_to_text(self, doc):
-        """
-        質問:question
-        選択肢:0.choice0,1.choice1, ...,4.choice4
-        回答:
-        """
-        choices = ",".join([f"{idx}.{choice}" for idx, choice in enumerate(doc["choices"])])
-        return f"質問:{doc['goal']}\n" f"選択肢:{choices}\n" "回答:"
-
-    def doc_to_target(self, doc):
-        return f"{doc['gold']}"
-
-    def construct_requests(self, doc, ctx):
-        lls = [rf.loglikelihood(ctx, "{}".format(choice))[0] for choice in doc["choices"]]
-
-        return lls
-
-    def process_results(self, doc, results):
-        gold = doc["gold"]
-
-        response = np.argmax(results)
-        acc = 1.0 if response == gold else 0.0
-        completion_len = np.array([float(len(i)) for i in doc["choices"]])
-        acc_norm = 1.0 if np.argmax(results / completion_len) == gold else 0.0
-
-        out = {
-            "acc": acc,
-            "acc_norm": acc_norm,
-        }
-        return out
+        return doc["query"]
