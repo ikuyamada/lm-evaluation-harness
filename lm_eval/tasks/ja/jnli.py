@@ -28,7 +28,6 @@ _CITATION = """
 """
 
 
-
 class JNLI(XNLIBase):
     VERSION = 1.1
     DATASET_PATH = "shunk031/JGLUE"
@@ -44,21 +43,17 @@ class JNLI(XNLIBase):
         return False
 
     def training_docs(self):
-        return map(self._process_doc, self.dataset["train"]))
+        return map(self._process_doc, self.dataset["train"])
 
     def validation_docs(self):
         return map(self._process_doc, self.dataset["validation"])
 
     def _process_doc(self, doc):
-        if doc['label'] == 0:
+        if doc["label"] == 0:
             label = 0
-        elif doc['label'] == 1:
+        elif doc["label"] == 1:
             label = 2
         else:
             label = 1
 
-        return {
-            "premise": doc["sentence1"],
-            "hypothesis": doc["sentence2"],
-            "label": label
-        }
+        return {"premise": doc["sentence1"], "hypothesis": doc["sentence2"], "label": label}
