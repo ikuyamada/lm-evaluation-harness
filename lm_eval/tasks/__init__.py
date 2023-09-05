@@ -69,6 +69,7 @@ from . import haerae
 from . import cmmlu
 
 from .ja import jcommonsenseqa
+from .ja import jnli
 
 ########################################
 # Translation tasks
@@ -350,6 +351,7 @@ TASK_REGISTRY = {
     **ceval.create_all_tasks(),
     **cmmlu.create_all_tasks(),
     "jcommonsenseqa": jcommonsenseqa.JCommonsenseQA,
+    "jnli": jnli.JNLI,
 }
 
 
