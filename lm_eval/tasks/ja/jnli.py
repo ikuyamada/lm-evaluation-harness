@@ -7,7 +7,6 @@ JGLUE has been constructed from scratch without translation.
 
 Homepage: https://github.com/yahoojapan/JGLUE
 """
-from lm_eval.base import rf
 from lm_eval.tasks.xnli import XNLIBase
 
 _CITATION = """
@@ -32,7 +31,7 @@ class JNLI(XNLIBase):
     VERSION = 1.1
     DATASET_PATH = "shunk031/JGLUE"
     DATASET_NAME = "JNLI"
-    QUESTION_WORD = "正しい"
+    QUESTION_WORD = "正しいですか？"
     ENTAILMENT_LABEL = "はい"
     NEUTRAL_LABEL = "また"
     CONTRADICTION_LABEL = "いいえ"
